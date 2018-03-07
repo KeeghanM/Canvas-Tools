@@ -1,3 +1,6 @@
+// Globals
+var dt = 0
+
 // Get HTML Canvas elements, and turn them into our own Canvas Objects
 function GetCanvas (id) {
   return new Canvas(id)
@@ -25,6 +28,9 @@ function Canvas (id, w, h, p) {
   this.canvas = document.getElementById(id)
   this.ctx = this.canvas.getContext('2d')
 
+  this.width = this.canvas.width
+  this.height = this.canvas.height
+
   // Black stroke and fill by default
   this.defaultCol = '#000'
   this.ctx.strokeStyle = this.defaultCol
@@ -42,6 +48,9 @@ function Canvas (id, w, h, p) {
   this.frameRate = 60
   this.lastFrameTime = 0
   this.loop = true
+
+  // Used when calculating dt
+  this.lastUpdate = 0
 
   // Default background of white, need this so we can re-do it in each Update
   this._bgColor = '#fff'
@@ -63,6 +72,16 @@ Canvas.prototype.SetBackground = function (col) {
 
   // Reset the default fill style for future drawing
   this.ctx.fillStyle = this.defaultCol
+}
+
+Canvas.prototype.SetWidth = function (x) {
+  this.canvas.width = x
+  this.width = x
+}
+
+Canvas.prototype.SetHeight = function (x) {
+  this.canvas.height = x
+  this.height = x
 }
 
 Canvas.prototype.SetStroke = function (col, w) {
@@ -158,4 +177,5 @@ Canvas.prototype._update = function () {
     // loop
     window.requestAnimationFrame(function () { _this._update() })
   }
+  dt = 1 / _this.frameRate
 }
