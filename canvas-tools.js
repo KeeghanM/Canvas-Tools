@@ -25,6 +25,9 @@ function Canvas (id, w, h, p) {
   this.canvas = document.getElementById(id)
   this.ctx = this.canvas.getContext('2d')
 
+  this.width = this.canvas.width
+  this.height = this.canvas.height
+
   // Black stroke and fill by default
   this.defaultCol = '#000'
   this.ctx.strokeStyle = this.defaultCol
@@ -63,6 +66,16 @@ Canvas.prototype.SetBackground = function (col) {
 
   // Reset the default fill style for future drawing
   this.ctx.fillStyle = this.defaultCol
+}
+
+Canvas.prototype.SetWidth = function (x) {
+  this.canvas.width = x
+  this.width = x
+}
+
+Canvas.prototype.SetHeight = function (x) {
+  this.canvas.height = x
+  this.height = x
 }
 
 Canvas.prototype.SetStroke = function (col, w) {

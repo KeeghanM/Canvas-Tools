@@ -4,13 +4,15 @@ var canvas = GetCanvas('main-canvas')
 canvas.SetBackground('#AAA')
 canvas.Loop(true)
 canvas.FrameRate(25)
+canvas.SetWidth(500)
+canvas.SetHeight(500)
 
 // Some variables for what we will draw
 let x = 50
 let y = 50
 let r = 20
 let mrX = 10
-let mrY = 10
+let mrY = 20
 
 // This function will run on a loop forever, or untill you call canvas.Loop(false);
 function Update () {
@@ -19,14 +21,14 @@ function Update () {
   canvas.Circle(x, y, r)
 
   canvas.SetStroke('red', 3)
-  canvas.Line(150, 0, x, y)
+  canvas.Line(canvas.width / 2, 0, x, y)
 
-  if (x > 300 - r || x < r) {
+  if (x > canvas.width - r || x < r) {
     mrX = mrX * -1
   }
   x += mrX
 
-  if (y > 150 - r || y < r + 5) {
+  if (y > canvas.height - r || y < r + 5) {
     mrY = mrY * -1
   }
   y += mrY
