@@ -75,3 +75,43 @@ Canvas.prototype.NoStroke = function(){
 Canvas.prototype.NoFill = function(){
 	this.fill = false;
 }
+
+Canvas.prototype.resetNoFillAndStroke = function(){
+	this.fill = true;
+	this.stroke = true;
+}
+
+
+// Simple Drawing Tools
+Canvas.prototype.Line = function(sx,sy,ex,ey){
+	this.ctx.moveTo(sx,sy);
+	this.ctx.lineTo(ex,ey);
+	this.ctx.stroke();
+}
+
+Canvas.prototype.Circle = function(x,y,r){
+	this.ctx.beginPath();
+	this.ctx.arc(x,y,r,0,2*Math.PI);
+	if(this.fill){
+		this.ctx.fill();
+	}
+	if(this.stroke){
+		this.ctx.stroke();
+	}
+	// No Fill and No Stroke are one off only
+	// So after each draw, we reset
+	this.resetNoFillAndStroke();
+}
+
+Canvas.prototype.Rect = function(x,y,w,h){
+	this.ctx.rect(x,y,w,h);
+	if(this.fill){
+		this.ctx.fill();
+	}
+	if(this.stroke){
+		this.ctx.stroke();
+	}
+	// No Fill and No Stroke are one off only
+	// So after each draw, we reset
+	this.resetNoFillAndStroke();
+}
