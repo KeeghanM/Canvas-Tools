@@ -37,15 +37,33 @@ function Canvas(id,w,h,p){
 	// Bools to determine HOW we will draw our shapes
 	this.fill = true;
 	this.stroke = true;
+
+	// Default framrate of 60
+	this.frameRate = 60;
+	this.lastFrameTime = 0;
+	this.loop = true;
+
+	// Default background of white, need this so we can re-do it in each Update
+	this._bgColor = "#fff"
 }
 
 // Canvas Property Functions
+Canvas.prototype.Loop = function(b){
+	this.loop = b;
+}
+
+Canvas.prototype.FrameRate = function(fps){
+	this.frameRate = fps;
+}
+
 Canvas.prototype.SetBackground = function(col) {
-	this.ctx.fillStyle = col;
+	this._bgColor=(col);
+	this.ctx.fillStyle = this._bgColor;
 	this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
 	// Reset the default fill style for future drawing
 	this.ctx.fillStyle = this.defaultCol;
+
 }
 
 Canvas.prototype.SetStroke = function(w,col){
@@ -114,4 +132,34 @@ Canvas.prototype.Rect = function(x,y,w,h){
 	// No Fill and No Stroke are one off only
 	// So after each draw, we reset
 	this.resetNoFillAndStroke();
+}
+
+
+// Animation
+Canvas.prototype.Begin = function(){
+	this._update();
+}
+Canvas.prototype._update = function(){
+	// This update function calls any user defined Update function
+	// and should run at least once when the canvas is first created.
+
+	let _this = this;
+
+	let now = window.performance.now();
+	let timeSinceLast = now - _this.lastFrameTime;
+	let timeBetweenFrames = 1000 / _this.frameRate;
+
+	if(_this.loop == true || timeSinceLast >= timeBetweenFrames){ // 
+		// Call the users Update function
+		if (timeSinceLast >= timeBetweenFrames) { 
+			if (typeof Update === "function") {
+				_this.SetBackground(_this._bgColor);
+				Update();
+			}
+			_this.lastFrameTime = now;
+		}
+
+		// loop
+		window.requestAnimationFrame(function() { _this._update(); });
+	}
 }
