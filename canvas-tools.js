@@ -1,3 +1,13 @@
+// Get HTML Canvas elements, and turn them into our own Canvas Objects
+function GetCanvas(id) {
+	return new Canvas(id);
+}
+
+function CreateCanvas(id,w,h,p) {
+	return new Canvas(id,w,h,p);
+}
+
+// Canvas Object Construct
 function Canvas(id,w,h,p){
 	if(arguments.length > 1){
 		let c = document.createElement("canvas");
@@ -14,12 +24,18 @@ function Canvas(id,w,h,p){
 	}
 	this.canvas = document.getElementById(id);
 	this.ctx    = this.canvas.getContext("2d");
+
+	// Black stroke and fill by default
+	this.defaultCol = "#000"
+	this.ctx.strokeStyle = this.defaultCol;
+	this.ctx.fillStyle = this.defaultCol;
 }
 
-function GetCanvas(id) {
-	return new Canvas(id);
-}
+// Canvas Property Functions
+Canvas.prototype.SetBackground = function(col) {
+	this.ctx.fillStyle = col;
+	this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-function CreateCanvas(id,w,h,p) {
-	return new Canvas(id,w,h,p);
+	// Reset the default fill style for future drawing
+	this.ctx.fillStyle = this.defaultCol;
 }
