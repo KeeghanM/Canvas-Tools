@@ -3,7 +3,7 @@ var canvas = GetCanvas('main-canvas')
 // Setup Canvas Details
 canvas.SetBackground('#AAA')
 canvas.Loop(true)
-canvas.FrameRate(25)
+canvas.FrameRate(60)
 canvas.SetWidth(500)
 canvas.SetHeight(500)
 
@@ -11,8 +11,8 @@ canvas.SetHeight(500)
 let x = 50
 let y = 50
 let r = 20
-let mrX = 10
-let mrY = 20
+let mrX = 100
+let mrY = 200
 
 // This function will run on a loop forever, or untill you call canvas.Loop(false);
 function Update () {
@@ -26,12 +26,12 @@ function Update () {
   if (x > canvas.width - r || x < r) {
     mrX = mrX * -1
   }
-  x += mrX
+  x += mrX * dt
 
   if (y > canvas.height - r || y < r + 5) {
     mrY = mrY * -1
   }
-  y += mrY
+  y += mrY * dt
 }
 
 // Let the canvas know it can begin using it's Update function

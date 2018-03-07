@@ -1,3 +1,6 @@
+// Globals
+var dt = 0
+
 // Get HTML Canvas elements, and turn them into our own Canvas Objects
 function GetCanvas (id) {
   return new Canvas(id)
@@ -45,6 +48,9 @@ function Canvas (id, w, h, p) {
   this.frameRate = 60
   this.lastFrameTime = 0
   this.loop = true
+
+  // Used when calculating dt
+  this.lastUpdate = 0
 
   // Default background of white, need this so we can re-do it in each Update
   this._bgColor = '#fff'
@@ -171,4 +177,5 @@ Canvas.prototype._update = function () {
     // loop
     window.requestAnimationFrame(function () { _this._update() })
   }
+  dt = 1 / _this.frameRate
 }
