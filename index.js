@@ -24,3 +24,7 @@ canvas = GetCanvas("main-canvas");
 // 	window.console.log("Change");
 	canvas.SetFill("blue");
 // 	window.console.log("Fill Color: " + canvas.ctx.fillStyle);
+
+canvas.Line(5,10,200,100);
+
+canvas.Circle(50,50,8);

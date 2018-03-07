@@ -63,3 +63,16 @@ Canvas.prototype.SetFill = function(col){
 Canvas.prototype.ResetFill = function(){
 	this.ctx.fillStyle = this.defaultCol;
 }
+
+// Simple Drawing Tools
+Canvas.prototype.Line = function(sx,sy,ex,ey){
+	this.ctx.moveTo(sx,sy);
+	this.ctx.lineTo(ex,ey);
+	this.ctx.stroke();
+}
+
+Canvas.prototype.Circle = function(x,y,r){
+	this.ctx.beginPath();
+	this.ctx.arc(x,y,r,0,2*Math.PI);
+	this.ctx.stroke();
+}
