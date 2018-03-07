@@ -102,3 +102,16 @@ Canvas.prototype.Circle = function(x,y,r){
 	// So after each draw, we reset
 	this.resetNoFillAndStroke();
 }
+
+Canvas.prototype.Rect = function(x,y,w,h){
+	this.ctx.rect(x,y,w,h);
+	if(this.fill){
+		this.ctx.fill();
+	}
+	if(this.stroke){
+		this.ctx.stroke();
+	}
+	// No Fill and No Stroke are one off only
+	// So after each draw, we reset
+	this.resetNoFillAndStroke();
+}

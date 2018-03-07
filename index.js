@@ -49,5 +49,8 @@ canvas = GetCanvas("main-canvas");
 
 // Draw a circle with new colors
 	canvas.SetFill("green");
-	canvas.NoStroke();
+	canvas.SetStroke(5,"orange");
 	canvas.Circle(170,50,20);
+
+// Draw a rectangle
+	canvas.Rect(50,100,100,50);
