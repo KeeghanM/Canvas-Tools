@@ -29,6 +29,10 @@ function Canvas(id,w,h,p){
 	this.defaultCol = "#000"
 	this.ctx.strokeStyle = this.defaultCol;
 	this.ctx.fillStyle = this.defaultCol;
+
+	// 1 px line width by default
+	this.defaultLineWidth = 1;
+	this.ctx.lineWidth = this.defaultLineWidth;
 }
 
 // Canvas Property Functions
@@ -37,5 +41,25 @@ Canvas.prototype.SetBackground = function(col) {
 	this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
 
 	// Reset the default fill style for future drawing
+	this.ctx.fillStyle = this.defaultCol;
+}
+
+Canvas.prototype.SetStroke = function(w,col){
+	if(col){
+		this.ctx.strokeStyle = col;
+	}
+	if(w){
+		this.ctx.lineWidth = w;
+	}
+}
+Canvas.prototype.ResetStroke = function(){
+	this.ctx.strokeStyle = this.defaultCol;
+	this.ctx.lineWidth = this.defaultLineWidth;
+}
+
+Canvas.prototype.SetFill = function(col){
+	this.ctx.fillStyle = col;
+}
+Canvas.prototype.ResetFill = function(){
 	this.ctx.fillStyle = this.defaultCol;
 }
