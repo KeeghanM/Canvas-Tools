@@ -33,6 +33,10 @@ function Canvas(id,w,h,p){
 	// 1 px line width by default
 	this.defaultLineWidth = 1;
 	this.ctx.lineWidth = this.defaultLineWidth;
+
+	// Bools to determine HOW we will draw our shapes
+	this.fill = true;
+	this.stroke = true;
 }
 
 // Canvas Property Functions
@@ -75,4 +79,12 @@ Canvas.prototype.Circle = function(x,y,r){
 	this.ctx.beginPath();
 	this.ctx.arc(x,y,r,0,2*Math.PI);
 	this.ctx.stroke();
+}
+
+Canvas.prototype.NoStroke = function(){
+	this.stroke = false;
+}
+
+Canvas.prototype.NoFill = function(){
+	this.fill = false;
 }
