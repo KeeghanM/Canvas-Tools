@@ -1,56 +1,36 @@
-canvas = GetCanvas("main-canvas");
-// window.console.log(canvas);
+var canvas = GetCanvas('main-canvas')
 
-// canvas2 = CreateCanvas("second",150,150,"area");
-// window.console.log(canvas2);
+// Setup Canvas Details
+canvas.SetBackground('#AAA')
+canvas.Loop(true)
+canvas.FrameRate(25)
 
-////////////
-// SETUPS //
-////////////
+// Some variables for what we will draw
+let x = 50
+let y = 50
+let r = 20
+let mrX = 10
+let mrY = 10
 
-// Change BG Color
-	canvas.SetBackground("#AAA");
+// This function will run on a loop forever, or untill you call canvas.Loop(false);
+function Update () {
+  canvas.SetFill('pink')
+  canvas.NoStroke()
+  canvas.Circle(x, y, r)
 
-// Initial Stroke Settings
-	window.console.log("Start");
-	window.console.log("Stroke Width: " + canvas.ctx.lineWidth);
-	window.console.log("Stroke Color: " + canvas.ctx.strokeStyle);
-// Change stroke Settings
-	canvas.SetStroke(5,"red"); // CHANGE HAPPENS HERE
-	window.console.log("Change");
-	window.console.log("Stroke Width: " + canvas.ctx.lineWidth);
-	window.console.log("Stroke Color: " + canvas.ctx.strokeStyle);
+  canvas.SetStroke('red', 3)
+  canvas.Line(150, 0, x, y)
 
-// Initial Fill Settings
-	window.console.log("Start");
-	window.console.log("Fill Color: " + canvas.ctx.fillStyle);
-// Change Fill Settings
-	canvas.SetFill("blue"); // CHANGE HAPPENS HERE
-	window.console.log("Change");
-	window.console.log("Fill Color: " + canvas.ctx.fillStyle);
+  if (x > 300 - r || x < r) {
+    mrX = mrX * -1
+  }
+  x += mrX
 
-////////////
-// SHAPES //
-////////////
+  if (y > 150 - r || y < r + 5) {
+    mrY = mrY * -1
+  }
+  y += mrY
+}
 
-// Draw a simple line, from top-left to bottom-right
-	canvas.Line(0,0,300,150);
-
-// Draw a circle with ONLY fill
-	canvas.NoStroke();
-	canvas.Circle(50,50,20);
-
-// Draw a cirlce with ONLY stroke
-	canvas.NoFill();
-	canvas.Circle(90,50,20);
-
-// Draw a circle with BOTH stroke AND Fill
-	canvas.Circle(130,50,20);
-
-// Draw a circle with new colors
-	canvas.SetFill("green");
-	canvas.SetStroke(5,"orange");
-	canvas.Circle(170,50,20);
-
-// Draw a rectangle
-	canvas.Rect(50,100,100,50);
+// Let the canvas know it can begin using it's Update function
+canvas.Begin()
