@@ -11,171 +11,173 @@ function CreateCanvas (id, w, h, p) {
 }
 
 // Canvas Object Construct
-function Canvas (id, w, h, p) {
-  if (arguments.length > 1) {
-    let c = document.createElement('canvas')
-    c.id = id
-    c.width = w
-    c.height = h
+class Canvas {
+  constructor (id, w, h, p) {
+    if (arguments.length > 1) {
+      let c = document.createElement('canvas')
+      c.id = id
+      c.width = w
+      c.height = h
 
-    let po = document.getElementById(p)
-    if (po) {
-      po.append(c)
-    } else {
-      document.body.appendChild(c)
+      let po = document.getElementById(p)
+      if (po) {
+        po.append(c)
+      } else {
+        document.body.appendChild(c)
+      }
+    }
+    this.canvas = document.getElementById(id)
+    this.ctx = this.canvas.getContext('2d')
+
+    this.width = this.canvas.width
+    this.height = this.canvas.height
+
+    // Black stroke and fill by default
+    this.defaultCol = '#000'
+    this.ctx.strokeStyle = this.defaultCol
+    this.ctx.fillStyle = this.defaultCol
+
+    // 1 px line width by default
+    this.defaultLineWidth = 1
+    this.ctx.lineWidth = this.defaultLineWidth
+
+    // Bools to determine HOW we will draw our shapes
+    this.fill = true
+    this.stroke = true
+
+    // Default framrate of 60
+    this.frameRate = 60
+    this.lastFrameTime = 0
+    this.loop = true
+
+    // Used when calculating dt
+    this.lastUpdate = 0
+
+    // Default background of white, need this so we can re-do it in each Update
+    this._bgColor = '#fff'
+  }
+
+  // Canvas Property Functions
+  Loop (b) {
+    this.loop = b
+  }
+
+  FrameRate (fps) {
+    this.frameRate = fps
+  }
+
+  SetBackground (col) {
+    this._bgColor = (col)
+    this.ctx.fillStyle = this._bgColor
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+
+    // Reset the default fill style for future drawing
+    this.ctx.fillStyle = this.defaultCol
+  }
+
+  SetWidth (x) {
+    this.canvas.width = x
+    this.width = x
+  }
+
+  SetHeight (x) {
+    this.canvas.height = x
+    this.height = x
+  }
+
+  SetStroke (col, w) {
+    this.stroke = true
+    this.ctx.strokeStyle = col
+    if (w) {
+      this.ctx.lineWidth = w
     }
   }
-  this.canvas = document.getElementById(id)
-  this.ctx = this.canvas.getContext('2d')
-
-  this.width = this.canvas.width
-  this.height = this.canvas.height
-
-  // Black stroke and fill by default
-  this.defaultCol = '#000'
-  this.ctx.strokeStyle = this.defaultCol
-  this.ctx.fillStyle = this.defaultCol
-
-  // 1 px line width by default
-  this.defaultLineWidth = 1
-  this.ctx.lineWidth = this.defaultLineWidth
-
-  // Bools to determine HOW we will draw our shapes
-  this.fill = true
-  this.stroke = true
-
-  // Default framrate of 60
-  this.frameRate = 60
-  this.lastFrameTime = 0
-  this.loop = true
-
-  // Used when calculating dt
-  this.lastUpdate = 0
-
-  // Default background of white, need this so we can re-do it in each Update
-  this._bgColor = '#fff'
-}
-
-// Canvas Property Functions
-Canvas.prototype.Loop = function (b) {
-  this.loop = b
-}
-
-Canvas.prototype.FrameRate = function (fps) {
-  this.frameRate = fps
-}
-
-Canvas.prototype.SetBackground = function (col) {
-  this._bgColor = (col)
-  this.ctx.fillStyle = this._bgColor
-  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-
-  // Reset the default fill style for future drawing
-  this.ctx.fillStyle = this.defaultCol
-}
-
-Canvas.prototype.SetWidth = function (x) {
-  this.canvas.width = x
-  this.width = x
-}
-
-Canvas.prototype.SetHeight = function (x) {
-  this.canvas.height = x
-  this.height = x
-}
-
-Canvas.prototype.SetStroke = function (col, w) {
-  this.stroke = true
-  this.ctx.strokeStyle = col
-  if (w) {
-    this.ctx.lineWidth = w
+  ResetStroke () {
+    this.ctx.strokeStyle = this.defaultCol
+    this.ctx.lineWidth = this.defaultLineWidth
   }
-}
-Canvas.prototype.ResetStroke = function () {
-  this.ctx.strokeStyle = this.defaultCol
-  this.ctx.lineWidth = this.defaultLineWidth
-}
 
-Canvas.prototype.SetFill = function (col) {
-  this.ctx.fillStyle = col
-}
-Canvas.prototype.ResetFill = function () {
-  this.ctx.fillStyle = this.defaultCol
-}
-
-Canvas.prototype.NoStroke = function () {
-  this.stroke = false
-}
-
-Canvas.prototype.NoFill = function () {
-  this.fill = false
-}
-
-Canvas.prototype.resetNoFillAndStroke = function () {
-  this.fill = true
-  this.stroke = true
-}
-
-// Simple Drawing Tools
-Canvas.prototype.Line = function (sx, sy, ex, ey) {
-  this.ctx.moveTo(sx, sy)
-  this.ctx.lineTo(ex, ey)
-  this.ctx.stroke()
-}
-
-Canvas.prototype.Circle = function (x, y, r) {
-  this.ctx.beginPath()
-  this.ctx.arc(x, y, r, 0, 2 * Math.PI)
-  if (this.fill) {
-    this.ctx.fill()
+  SetFill (col) {
+    this.ctx.fillStyle = col
   }
-  if (this.stroke) {
+  ResetFill () {
+    this.ctx.fillStyle = this.defaultCol
+  }
+
+  NoStroke () {
+    this.stroke = false
+  }
+
+  NoFill () {
+    this.fill = false
+  }
+
+  resetNoFillAndStroke () {
+    this.fill = true
+    this.stroke = true
+  }
+
+  // Simple Drawing Tools
+  Line (sx, sy, ex, ey) {
+    this.ctx.moveTo(sx, sy)
+    this.ctx.lineTo(ex, ey)
     this.ctx.stroke()
   }
-  // No Fill and No Stroke are one off only
-  // So after each draw, we reset
-  this.resetNoFillAndStroke()
-}
 
-Canvas.prototype.Rect = function (x, y, w, h) {
-  this.ctx.rect(x, y, w, h)
-  if (this.fill) {
-    this.ctx.fill()
+  Circle (x, y, r) {
+    this.ctx.beginPath()
+    this.ctx.arc(x, y, r, 0, 2 * Math.PI)
+    if (this.fill) {
+      this.ctx.fill()
+    }
+    if (this.stroke) {
+      this.ctx.stroke()
+    }
+    // No Fill and No Stroke are one off only
+    // So after each draw, we reset
+    this.resetNoFillAndStroke()
   }
-  if (this.stroke) {
-    this.ctx.stroke()
-  }
-  // No Fill and No Stroke are one off only
-  // So after each draw, we reset
-  this.resetNoFillAndStroke()
-}
 
-// Animation
-Canvas.prototype.Begin = function () {
-  this._update()
-}
-Canvas.prototype._update = function () {
+  Rect (x, y, w, h) {
+    this.ctx.rect(x, y, w, h)
+    if (this.fill) {
+      this.ctx.fill()
+    }
+    if (this.stroke) {
+      this.ctx.stroke()
+    }
+    // No Fill and No Stroke are one off only
+    // So after each draw, we reset
+    this.resetNoFillAndStroke()
+  }
+
+  // Animation
+  Begin () {
+    this._update()
+  }
+  _update () {
   // This update function calls any user defined Update function
   // and should run at least once when the canvas is first created.
 
-  let _this = this
+    let _this = this
 
-  let now = window.performance.now()
-  let timeSinceLast = now - _this.lastFrameTime
-  let timeBetweenFrames = 1000 / _this.frameRate
+    let now = window.performance.now()
+    let timeSinceLast = now - _this.lastFrameTime
+    let timeBetweenFrames = 1000 / _this.frameRate
 
-  if (_this.loop == true || timeSinceLast >= timeBetweenFrames) { //
+    if (_this.loop == true || timeSinceLast >= timeBetweenFrames) { //
     // Call the users Update function
-    if (timeSinceLast >= timeBetweenFrames) {
-      if (typeof Update === 'function') {
-        _this.SetBackground(_this._bgColor)
-        Update()
+      if (timeSinceLast >= timeBetweenFrames) {
+        if (typeof Update === 'function') {
+          _this.SetBackground(_this._bgColor)
+          Update()
+        }
+        _this.lastFrameTime = now
       }
-      _this.lastFrameTime = now
-    }
 
-    // loop
-    window.requestAnimationFrame(function () { _this._update() })
+      // loop
+      window.requestAnimationFrame(function () { _this._update() })
+    }
+    dt = 1 / _this.frameRate
   }
-  dt = 1 / _this.frameRate
 }
